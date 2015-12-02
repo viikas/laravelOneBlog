@@ -2,13 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+// request==Illuminate\Http\Request from app.php 
+use Request;
+use App\Http\Requests\BlogRequest;
 
+use App\Blog;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 class BlogsController extends Controller
-{
+{ 
+
+    public function __construct()
+    {
+        //$this->middleware('auth',['only'=>['create','store']]);
+        $this->middleware('auth',['except'=>['index','show']]);
+
+    }
     /**
      * Display a listing of the resource.
      *
@@ -17,6 +27,8 @@ class BlogsController extends Controller
     public function index()
     {
         //
+        $blogs=Blog::latest()->get();
+        return view('blogs.index')->with('blogs',$blogs);
     }
 
     /**
@@ -27,6 +39,7 @@ class BlogsController extends Controller
     public function create()
     {
         //
+        return view('blogs.create');
     }
 
     /**
@@ -35,9 +48,13 @@ class BlogsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BlogRequest $request)
     {
         //
+        $input= Request::all();
+         Blog::create($input);
+
+        return redirect('blogs');
     }
 
     /**
@@ -49,6 +66,8 @@ class BlogsController extends Controller
     public function show($id)
     {
         //
+        $blog=Blog::findOrFail($id);
+        return view('blogs.show')->with('blog',$blog); 
     }
 
     /**
@@ -60,6 +79,9 @@ class BlogsController extends Controller
     public function edit($id)
     {
         //
+        $blog=Blog::findOrFail($id);
+        return view('blogs.edit')->with('blog',$blog);
+
     }
 
     /**
@@ -69,9 +91,13 @@ class BlogsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(BlogRequest $request, $id)
     {
         //
+        $blog=Blog::findOrFail($id);
+        $blog->update($request->all());
+
+        return redirect('blogs');
     }
 
     /**
@@ -83,5 +109,8 @@ class BlogsController extends Controller
     public function destroy($id)
     {
         //
+        Blog::destroy($id);
+
+        return redirect('blogs');
     }
 }
