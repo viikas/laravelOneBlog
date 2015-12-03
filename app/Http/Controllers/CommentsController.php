@@ -2,23 +2,13 @@
 
 namespace App\Http\Controllers;
 
-// request==Illuminate\Http\Request from app.php 
-use Request;
-use App\Http\Requests\BlogRequest;
+use Illuminate\Http\Request;
 
-use App\Blog;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class BlogsController extends Controller
-{ 
-
-    public function __construct()
-    {
-        //$this->middleware('auth',['only'=>['create','store']]);
-        $this->middleware('auth',['except'=>['index','show']]);
-
-    }
+class CommentsController extends Controller
+{
     /**
      * Display a listing of the resource.
      *
@@ -27,8 +17,6 @@ class BlogsController extends Controller
     public function index()
     {
         //
-        $blogs=Blog::latest()->get();
-        return view('admin.blogs.showAllBlog')->with('blogs',$blogs);
     }
 
     /**
@@ -39,7 +27,6 @@ class BlogsController extends Controller
     public function create()
     {
         //
-        return view('admin.blogs.createBlog');
     }
 
     /**
@@ -48,13 +35,9 @@ class BlogsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(BlogRequest $request)
+    public function store(Request $request)
     {
         //
-        $input= Request::all();
-         Blog::create($input);
-
-        return redirect('blogsAdmin');
     }
 
     /**
@@ -66,8 +49,6 @@ class BlogsController extends Controller
     public function show($id)
     {
         //
-        $blog=Blog::findOrFail($id);
-        return view('blogs.blogs.show')->with('blog',$blog); 
     }
 
     /**
@@ -79,9 +60,6 @@ class BlogsController extends Controller
     public function edit($id)
     {
         //
-        $blog=Blog::findOrFail($id);
-        return view('admin.blogs.editBlog')->with('blog',$blog);
-
     }
 
     /**
@@ -91,13 +69,9 @@ class BlogsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(BlogRequest $request, $id)
+    public function update(Request $request, $id)
     {
         //
-        $blog=Blog::findOrFail($id);
-        $blog->update($request->all());
-
-        return redirect('blogsAdmin');
     }
 
     /**
@@ -109,8 +83,5 @@ class BlogsController extends Controller
     public function destroy($id)
     {
         //
-        Blog::destroy($id);
-
-        return redirect('blogsAdmin');
     }
 }

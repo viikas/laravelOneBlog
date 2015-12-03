@@ -15,17 +15,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-
-
-
 Route::get('contact','PagesController@contact');
-//Route::get('blogs','BlogsControllerOne@index');
-//Route::get('blogs/{id}','BlogsControllerOne@show');
 
-//using named routes
-//Route::get('blogers',[ 'as'=>'blogs.blogs','uses'=>'BlogsControllerOne@blogs' ]);
-Route::resource('blogs','BlogsController');
+
+Route::get('admin/', function () {
+    return view('admin/index');
+});
+
+//REST API for videos
+Route::resource('videosAdmin','VideosController');
+
+//REST API for Commments
+Route::resource('commmentsAdmin','CommentsController');
+//REST API for Blogs
+Route::resource('blogsAdmin','BlogsController');
+
 
 // Authentication routes...
 Route::get('auth/login', ['as'=>'login','uses'=>'Auth\AuthController@getLogin']);
